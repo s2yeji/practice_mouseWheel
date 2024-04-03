@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+  </head>
+  <body>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      /* html,
+      body {
+        scroll-behavior: smooth;
+      } */
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      header {
+        position: fixed;
+        top: 0;
+        background-color: rgba(255, 255, 255, 0.6);
+        width: 100%;
+        color: #333;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+      }
+      nav {
+        border: 1px solid red;
+      }
+      nav a {
+        display: inline-block;
+        background-color: white;
+        padding: 1rem;
+      }
+      nav a.on,
+      nav a:hover {
+        background-color: #333;
+        color: white;
+      }
+      main > section {
+        height: 100vh;
+        font-size: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      section:nth-of-type(1) {
+        background-color: rgb(255, 240, 240);
+      }
+      section:nth-of-type(2) {
+        background-color: rgb(254, 242, 222);
+      }
+      section:nth-of-type(3) {
+        background-color: rgb(251, 248, 214);
+      }
+      section:nth-of-type(4) {
+        background-color: rgb(125, 142, 125);
+      }
+      section:nth-of-type(5) {
+        background-color: rgb(220, 235, 247);
+      }
+      section:nth-of-type(6) {
+        background-color: rgb(83, 90, 119);
+      }
+      section:nth-of-type(7) {
+        background-color: rgb(218, 207, 229);
+      }
+    </style>
+
+    <header>
+      <h1>mouse wheel event</h1>
+      <nav>
+        <a href="#sec1">1</a>
+        <a href="#sec2">2</a>
+        <a href="#sec3">3</a>
+        <a href="#sec4">4</a>
+        <a href="#sec5">5</a>
+        <a href="#sec6">6</a>
+        <a href="#sec7">7</a>
+      </nav>
+    </header>
+    <main>
+      <section id="sec1" class="box">1</section>
+      <section id="sec2" class="box">2</section>
+      <section id="sec3" class="box">3</section>
+      <section id="sec4" class="box">4</section>
+      <section id="sec5" class="box">5</section>
+      <section id="sec6" class="box">6</section>
+      <section id="sec7" class="box">7</section>
+    </main>
+    <footer>footer</footer>
+
+    <script>
+      const boxes = document.querySelectorAll('main > .box');
+      const nav = document.querySelector('header nav');
+      // const elmA = document.querySelectorAll('nav a');
+      // console.log(elmA);
+
+      // 이벤트 위임 방식으로 a 요소의 이벤트를 처리
+      // nav 영역을 클릭했을 때 e.target이 a 요소일 때만 이벤트 처리
+      // e.target의 속성값 중에 href 속성을 활용
+      // 각 section의 id와 매칭
+      nav.addEventListener('click', (e) => {
+        // console.log(e.target);
+        // console.log(e.target.tagName);
+        // console.log(e.currentTarget);
+
+        if (e.target.tagName === 'A') {
+          e.preventDefault();
+          const target = e.target;
+          const href = target.getAttribute('href');
+          console.log(href);
+          const offsetTop = document.querySelector(href).offsetTop;
+          console.log(offsetTop);
+
+          window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth',
+          });
+
+          // 클릭된 대상 즉 e.target에 .on 적용
+          // 그 전에 모든 a 요소에 .on 제거되어 있어야 함
+          // elmA.forEach((a) => {
+          //   a.classList.remove('on');
+          // });
+          // 위의 3줄은 const elmA로 nav 안의 모든 a를 담아놨을 떄 사용하는 방법
+          [...nav.children].forEach((a) => {
+            a.classList.remove('on');
+          });
+          target.classList.add('on');
+          console.log([...nav.children]);
+          // nav.children -> HTMLCollection
+          // [...nav.children]을 활용해 배열 구조로 변경함 [...변수]
+          // 변수의 내용을 deep copy 해서 새로운 배열 구조로 변경
+        }
+      });
+
+      boxes.forEach((box) => {
+        box.addEventListener('wheel', (e) => {
+          let delta = e.wheelDelta ? e.wheelDelta : -e.deltaY;
+          let prevElm = box.previousElementSibling;
+          let nextElm = box.nextElementSibling;
+          let moveTop;
+
+          // prevElm && prevElm.classList.contains('box')
+          // 이전 요소가 존재하며 그리고 (&& and) 이전 요소는 .box를 갖고 있는 경우
+          // 두 조건을 만족하는 경우에만 { 실행 영역 } 이 진행됨
+
+          if (delta > 0) {
+            if (prevElm && prevElm.classList.contains('box')) {
+              moveTop = prevElm.offsetTop;
+              console.log(moveTop);
+              window.scrollTo({
+                top: moveTop,
+                // behavior: 'smooth',
+              });
+            }
+          } else {
+            if (nextElm && nextElm.classList.contains('box')) {
+              moveTop = nextElm.offsetTop;
+              console.log(moveTop);
+              window.scrollTo({
+                top: moveTop,
+                // behavior: 'smooth',
+              });
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+  </head>
+  <body>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      /* html,
+      body {
+        scroll-behavior: smooth;
+      } */
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      header {
+        position: fixed;
+        top: 0;
+        background-color: rgba(255, 255, 255, 0.6);
+        width: 100%;
+        color: #333;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+      }
+      nav {
+        border: 1px solid red;
+      }
+      nav a {
+        display: inline-block;
+        background-color: white;
+        padding: 1rem;
+      }
+      nav a.on,
+      nav a:hover {
+        background-color: #333;
+        color: white;
+      }
+      main > section {
+        height: 100vh;
+        font-size: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      section:nth-of-type(1) {
+        background-color: rgb(255, 240, 240);
+      }
+      section:nth-of-type(2) {
+        background-color: rgb(254, 242, 222);
+      }
+      section:nth-of-type(3) {
+        background-color: rgb(251, 248, 214);
+      }
+      section:nth-of-type(4) {
+        background-color: rgb(125, 142, 125);
+      }
+      section:nth-of-type(5) {
+        background-color: rgb(220, 235, 247);
+      }
+      section:nth-of-type(6) {
+        background-color: rgb(83, 90, 119);
+      }
+      section:nth-of-type(7) {
+        background-color: rgb(218, 207, 229);
+      }
+    </style>
+
+    <header>
+      <h1>mouse wheel event</h1>
+      <nav>
+        <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">5</a>
+        <a href="#">6</a>
+        <a href="#">7</a>
+      </nav>
+    </header>
+    <main>
+      <section class="box">1</section>
+      <section class="box">2</section>
+      <section class="box">3</section>
+      <section class="box">4</section>
+      <section class="box">5</section>
+      <section class="box">6</section>
+      <section class="box">7</section>
+    </main>
+    <footer>footer</footer>
+
+    <script>
+      const boxes = document.querySelectorAll('main > .box');
+      const nav = document.querySelector('header nav');
+
+      nav.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
+          e.preventDefault();
+          // a 요소들 중에서 몇 번째인지 index의 값을 가져온다.
+          const idx = [...nav.children].indexOf(e.target);
+          const offsetTop = boxes[idx].offsetTop;
+          window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth',
+          });
+          // console.log([1, 2, 3, 4, 5].indexOf(5));
+          // console.log(boxes[idx]);
+          // console.log(idx);
+
+          // section[index] = boxes[index] 해당 요소의 offsetTop 정보를 활용해서 scroll 이동
+        }
+      });
+
+      boxes.forEach((box) => {
+        box.addEventListener('wheel', (e) => {
+          let delta = e.wheelDelta ? e.wheelDelta : -e.deltaY;
+          let prevElm = box.previousElementSibling;
+          let nextElm = box.nextElementSibling;
+          let moveTop;
+
+          // prevElm && prevElm.classList.contains('box')
+          // 이전 요소가 존재하며 그리고 (&& and) 이전 요소는 .box를 갖고 있는 경우
+          // 두 조건을 만족하는 경우에만 { 실행 영역 } 이 진행됨
+
+          if (delta > 0) {
+            if (prevElm && prevElm.classList.contains('box')) {
+              moveTop = prevElm.offsetTop;
+              console.log(moveTop);
+              window.scrollTo({
+                top: moveTop,
+                // behavior: 'smooth',
+              });
+            }
+          } else {
+            if (nextElm && nextElm.classList.contains('box')) {
+              moveTop = nextElm.offsetTop;
+              console.log(moveTop);
+              window.scrollTo({
+                top: moveTop,
+                // behavior: 'smooth',
+              });
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

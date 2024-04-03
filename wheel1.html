@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+  </head>
+  <body>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        scroll-behavior: smooth;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      header {
+        position: fixed;
+        background-color: rgba(255, 255, 255, 0.6);
+        width: 100%;
+        color: #333;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+      }
+      nav a {
+        display: inline-block;
+        background-color: white;
+        padding: 1rem;
+      }
+      nav a.on,
+      nav a:hover {
+        background-color: #333;
+        color: white;
+      }
+      main > section {
+        height: 100vh;
+        font-size: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      section:nth-of-type(1) {
+        background-color: rgb(255, 240, 240);
+      }
+      section:nth-of-type(2) {
+        background-color: rgb(254, 242, 222);
+      }
+      section:nth-of-type(3) {
+        background-color: rgb(251, 248, 214);
+      }
+      section:nth-of-type(4) {
+        background-color: rgb(125, 142, 125);
+      }
+      section:nth-of-type(5) {
+        background-color: rgb(220, 235, 247);
+      }
+      section:nth-of-type(6) {
+        background-color: rgb(83, 90, 119);
+      }
+      section:nth-of-type(7) {
+        background-color: rgb(218, 207, 229);
+      }
+    </style>
+
+    <header>
+      <h1>mouse wheel event</h1>
+      <nav>
+        <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">5</a>
+        <a href="#">6</a>
+        <a href="#">7</a>
+      </nav>
+    </header>
+    <main>
+      <section>1</section>
+      <section>2</section>
+      <section>3</section>
+      <section>4</section>
+      <section>5</section>
+      <section>6</section>
+      <section>7</section>
+    </main>
+    <footer>footer</footer>
+
+    <script>
+      const boxes = document.querySelectorAll('main > section');
+      // console.log(boxes);
+      boxes.forEach((box) => {
+        box.addEventListener('wheel', (e) => {
+          // console.log('wheel 이벤트 작동', e);
+          console.log('deltaY', -e.deltaY); // Firefox
+          console.log('wheelDelta', e.wheelDelta); // IE, Chrome
+          let delta = e.wheelDelta ? e.wheelDelta : -e.deltaY;
+          console.log(delta);
+          // 마우스 휠을 위로 올리면 0 보다 큰 상태 100, 120
+          // 마우스 휠을 아래로 내리면 0 보다 작은 상태 -100, -120
+        });
+      });
+    </script>
+  </body>
+</html>
